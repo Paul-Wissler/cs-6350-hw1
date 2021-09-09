@@ -48,4 +48,11 @@ def main():
     # If x2 = 1, then y = 0
     # If x2 = 0, then y = 0 if x4 = 0, and y = 0 if x4 = 1
 
+    # Q2
+    o = np.array(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r',]) # outlook
+    t = np.array(['h', 'h', 'h', 'm', 'c', 'c', 'c', 'm', 'c', 'm', 'm', 'm', 'h', 'm',]) # temperature
+    h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h',]) # humidity
+    w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
+    p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
+
 main()

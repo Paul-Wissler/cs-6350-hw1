@@ -2,9 +2,8 @@ import math
 import numpy as np
 
 
-def calc_entropy(set_array: np.array, unique_outcomes=2):
+def calc_entropy(set_array: np.array, unique_outcomes=2) -> float:
     h = list()
-    print(set_array)
     for p in set_array:
         if p > 1:
             raise ValueError(f'Probability was {p}. Probabilities may not exceed 1.')
@@ -15,7 +14,7 @@ def calc_entropy(set_array: np.array, unique_outcomes=2):
     return sum(h)
 
 
-def calc_gini_index(set_array: np.array, unique_outcomes=2):
+def calc_gini_index(set_array: np.array, unique_outcomes=2) -> float:
     h = list()
     for p in set_array:
         if p > 1:
@@ -27,11 +26,11 @@ def calc_gini_index(set_array: np.array, unique_outcomes=2):
     return 1 + sum(h)
 
 
-def calc_majority_error(set_array: np.array, unique_outcomes=2):
+def calc_majority_error(set_array: np.array, unique_outcomes=2) -> float:
     return min(set_array)
 
 
-def calc_gain(x: np.array, y: np.array, f=calc_entropy):
+def calc_gain(x: np.array, y: np.array, f=calc_entropy) -> float:
     H_y = f(calc_discrete_probability(y), unique_outcomes=len(np.unique(y)))
     s = len(y)
     e = list()
@@ -44,7 +43,7 @@ def calc_gain(x: np.array, y: np.array, f=calc_entropy):
     return H_y - sum(e)
 
 
-def calc_discrete_probability(x: np.array):
+def calc_discrete_probability(x: np.array) -> float:
     unique_vals = np.unique(x)
     p = np.array([])
     for i in unique_vals:
@@ -53,5 +52,5 @@ def calc_discrete_probability(x: np.array):
     return p
 
 
-def logn(x, n):
+def logn(x, n) -> float:
     return math.log(x) / math.log(n)

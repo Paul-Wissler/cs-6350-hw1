@@ -27,7 +27,6 @@ def calc_gini_index(set_array: np.array):
 
 
 def calc_majority_error(set_array: np.array):
-    # print(set_array)
     return min(set_array)
 
 

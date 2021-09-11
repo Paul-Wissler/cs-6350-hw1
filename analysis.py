@@ -4,6 +4,12 @@ import numpy as np
 
 
 def main():
+    
+    def print_vals_of_unique_labels(y, x):
+        for i in np.unique(x):
+            print(i)
+            print(y[np.where(x==i)])
+    
     # x1 = np.array([0, 0, 0, 1, 0, 1, 0,])
     # x2 = np.array([0, 1, 0, 0, 1, 1, 1,])
     # x3 = np.array([1, 0, 1, 0, 1, 0, 0,])
@@ -54,11 +60,11 @@ def main():
     h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h',]) # humidity
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
     p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
-    print(p)
+    
     p[np.where(p=='-')] = 0
     p[np.where(p=='+')] = 1
     p = p.astype(int)
-    print(p)
+    
 
     # This is all done with entropy
     print('play? entropy: ', dtree.calc_entropy(dtree.calc_bool_probability(p)))
@@ -75,6 +81,16 @@ def main():
     # windy gain: 0.04812703040826927
 
     # This is all done with ME
+    o = np.array(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r',]) # outlook
+    t = np.array(['h', 'h', 'h', 'm', 'c', 'c', 'c', 'm', 'c', 'm', 'm', 'm', 'h', 'm',]) # temperature
+    h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h',]) # humidity
+    w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
+    p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
+
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
+
     print('play? ME: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
     print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_majority_error))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_majority_error))
@@ -87,7 +103,76 @@ def main():
     # humidity gain: 0.07142857142857145
     # windy gain: 5.551115123125783e-17
 
+    print_vals_of_unique_labels(p, o)
+
+    # Can split on either outlook or humidity, will split on outlook for consistency
+    # o
+    # [1 1 1 1]
+    # r
+    # [1 1 0 1 0]
+    # s
+    # [0 0 0 1 1]
+    # Clearly, when outlook = overcast, then play = +
+
+    # Leaf when outlook = r
+    o = np.array(['r', 'r', 'r', 'r', 'r',]) # outlook
+    t = np.array(['m', 'c', 'c', 'm', 'm',]) # temperature
+    h = np.array(['h', 'n', 'n', 'n', 'h',]) # humidity
+    w = np.array(['w', 'w', 's', 'w', 's',]) # wind
+    p = np.array(['+', '+', '-', '+', '-',]) # play?
+
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
+
+    print('play? when o = r ME: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_majority_error))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_majority_error))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_majority_error))
+
+    # play? when o = r ME:  0.4
+    # temperature gain: 0.0
+    # humidity gain: 0.0
+    # windy gain: 0.4
+
+    # Clearly, split on windy
+    # Can see from data, when windy = w, then play? = +, and when windy = s, then play = -
+
+    # Leaf when outlook = s
+    o = np.array(['s', 's', 's', 's', 's',]) # outlook
+    t = np.array(['h', 'h', 'm', 'c', 'm',]) # temperature
+    h = np.array(['h', 'h', 'h', 'n', 'n',]) # humidity
+    w = np.array(['w', 's', 'w', 'w', 's',]) # wind
+    p = np.array(['-', '-', '-', '+', '+',]) # play?
+
+    # play? when o = s ME:  0.4
+    # temperature gain: 0.2
+    # humidity gain: 0.4
+    # windy gain: 0.0
+
+    # Clearly, split on humidity
+    # Can see from data, when humidity = h, then play? = -, and when humidity = n, then play? = +
+
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
+
+    print('play? when o = s ME: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_majority_error))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_majority_error))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_majority_error))
+
     # This is all done with GI
+    o = np.array(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r',]) # outlook
+    t = np.array(['h', 'h', 'h', 'm', 'c', 'c', 'c', 'm', 'c', 'm', 'm', 'm', 'h', 'm',]) # temperature
+    h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h',]) # humidity
+    w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
+    p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
+
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
+
     print('play? GI: ', dtree.calc_gini_index(dtree.calc_bool_probability(p)))
     print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_gini_index))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_gini_index))
@@ -99,5 +184,75 @@ def main():
     # temperature gain: 0.018707482993197244
     # humidity gain: 0.09183673469387743
     # windy gain: 0.030612244897959162
+
+    print_vals_of_unique_labels(p, o)
+
+    # outlook has highest gain, so split there
+    # o
+    # [1 1 1 1]
+    # r
+    # [1 1 0 1 0]
+    # s
+    # [0 0 0 1 1]
+    # Clearly, when outlook = overcast, then play = +
+    
+    # Leaf when outlook = r
+    o = np.array(['r', 'r', 'r', 'r', 'r',]) # outlook
+    t = np.array(['m', 'c', 'c', 'm', 'm',]) # temperature
+    h = np.array(['h', 'n', 'n', 'n', 'h',]) # humidity
+    w = np.array(['w', 'w', 's', 'w', 's',]) # wind
+    p = np.array(['+', '+', '-', '+', '-',]) # play?
+
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
+    
+    print('play? when o = r GI: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_gini_index))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_gini_index))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_gini_index))
+
+    # play? when o = r GI:  0.4
+    # temperature gain: 0.013333333333333308
+    # humidity gain: 0.013333333333333308
+    # windy gain: 0.48
+
+    # Clearly, split on windy
+    # Can see from data, when windy = w, then play? = +, and when windy = s, then play = -
+    
+    # Leaf when outlook = s
+    o = np.array(['s', 's', 's', 's', 's',]) # outlook
+    t = np.array(['h', 'h', 'm', 'c', 'm',]) # temperature
+    h = np.array(['h', 'h', 'h', 'n', 'n',]) # humidity
+    w = np.array(['w', 's', 'w', 'w', 's',]) # wind
+    p = np.array(['-', '-', '-', '+', '+',]) # play?
+
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
+    
+    print('play? when o = s GI: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_gini_index))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_gini_index))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_gini_index))
+
+    # play? when o = s ME:  0.4
+    # temperature gain: 0.27999999999999997
+    # humidity gain: 0.48
+    # windy gain: 0.013333333333333308
+
+    # Clearly, split on humidity
+    # Can see from data, when humidity = h, then play? = -, and when humidity = n, then play? = +
+
+    # Q3
+    o = np.array(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r', np.nan,]) # outlook
+    t = np.array(['h', 'h', 'h', 'm', 'c', 'c', 'c', 'm', 'c', 'm', 'm', 'm', 'h', 'm', 'm',]) # temperature
+    h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h', 'n',]) # humidity
+    w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's', 'w',]) # wind
+    p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-', '+',]) # play?
+    
+    p[np.where(p=='-')] = 0
+    p[np.where(p=='+')] = 1
+    p = p.astype(int)
 
 main()

@@ -1,0 +1,1 @@
+venv\Scripts\activate & python analysis.py & deactivate

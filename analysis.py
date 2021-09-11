@@ -16,7 +16,7 @@ def main():
     # x4 = np.array([0, 0, 1, 1, 0, 0, 1,])
     # y =  np.array([0, 0, 1, 1, 0, 0, 0,])
 
-    # print('H(y): ', dtree.calc_entropy(dtree.calc_bool_probability(y)))
+    # print('H(y): ', dtree.calc_entropy(dtree.calc_discrete_probability(y)))
     # print('x1 gain:', dtree.calc_gain(x1, y))
     # print('x2 gain:', dtree.calc_gain(x2, y))
     # print('x3 gain:', dtree.calc_gain(x3, y))
@@ -37,7 +37,7 @@ def main():
     # x4 = np.array([0, 1, 1,])
     # y =  np.array([0, 1, 1,])
 
-    # print('H(y): ', dtree.calc_entropy(dtree.calc_bool_probability(y)))
+    # print('H(y): ', dtree.calc_entropy(dtree.calc_discrete_probability(y)))
     # print('x1 gain:', dtree.calc_gain(x1, y))
     # print('x3 gain:', dtree.calc_gain(x3, y))
     # print('x4 gain:', dtree.calc_gain(x4, y))
@@ -61,13 +61,9 @@ def main():
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
     p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
     
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
-    
 
     # This is all done with entropy
-    print('play? entropy: ', dtree.calc_entropy(dtree.calc_bool_probability(p)))
+    print('play? entropy: ', dtree.calc_entropy(dtree.calc_discrete_probability(p)))
     print('outlook gain:', dtree.calc_gain(o, p))
     print('temperature gain:', dtree.calc_gain(t, p))
     print('humidity gain:', dtree.calc_gain(h, p))
@@ -87,11 +83,7 @@ def main():
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
     p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
 
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
-
-    print('play? ME: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('play? ME: ', dtree.calc_majority_error(dtree.calc_discrete_probability(p)))
     print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_majority_error))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_majority_error))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_majority_error))
@@ -121,11 +113,7 @@ def main():
     w = np.array(['w', 'w', 's', 'w', 's',]) # wind
     p = np.array(['+', '+', '-', '+', '-',]) # play?
 
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
-
-    print('play? when o = r ME: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('play? when o = r ME: ', dtree.calc_majority_error(dtree.calc_discrete_probability(p)))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_majority_error))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_majority_error))
     print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_majority_error))
@@ -153,11 +141,7 @@ def main():
     # Clearly, split on humidity
     # Can see from data, when humidity = h, then play? = -, and when humidity = n, then play? = +
 
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
-
-    print('play? when o = s ME: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('play? when o = s ME: ', dtree.calc_majority_error(dtree.calc_discrete_probability(p)))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_majority_error))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_majority_error))
     print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_majority_error))
@@ -169,11 +153,7 @@ def main():
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's',]) # wind
     p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-',]) # play?
 
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
-
-    print('play? GI: ', dtree.calc_gini_index(dtree.calc_bool_probability(p)))
+    print('play? GI: ', dtree.calc_gini_index(dtree.calc_discrete_probability(p)))
     print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_gini_index))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_gini_index))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_gini_index))
@@ -202,12 +182,8 @@ def main():
     h = np.array(['h', 'n', 'n', 'n', 'h',]) # humidity
     w = np.array(['w', 'w', 's', 'w', 's',]) # wind
     p = np.array(['+', '+', '-', '+', '-',]) # play?
-
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
     
-    print('play? when o = r GI: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('play? when o = r GI: ', dtree.calc_majority_error(dtree.calc_discrete_probability(p)))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_gini_index))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_gini_index))
     print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_gini_index))
@@ -226,12 +202,8 @@ def main():
     h = np.array(['h', 'h', 'h', 'n', 'n',]) # humidity
     w = np.array(['w', 's', 'w', 'w', 's',]) # wind
     p = np.array(['-', '-', '-', '+', '+',]) # play?
-
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
     
-    print('play? when o = s GI: ', dtree.calc_majority_error(dtree.calc_bool_probability(p)))
+    print('play? when o = s GI: ', dtree.calc_majority_error(dtree.calc_discrete_probability(p)))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_gini_index))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_gini_index))
     print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_gini_index))
@@ -250,9 +222,5 @@ def main():
     h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h', 'n',]) # humidity
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's', 'w',]) # wind
     p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-', '+',]) # play?
-    
-    p[np.where(p=='-')] = 0
-    p[np.where(p=='+')] = 1
-    p = p.astype(int)
 
 main()

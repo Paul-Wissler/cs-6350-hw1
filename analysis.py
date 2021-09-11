@@ -10,17 +10,17 @@ def main():
             print(i)
             print(y[np.where(x==i)])
     
-    # x1 = np.array([0, 0, 0, 1, 0, 1, 0,])
-    # x2 = np.array([0, 1, 0, 0, 1, 1, 1,])
-    # x3 = np.array([1, 0, 1, 0, 1, 0, 0,])
-    # x4 = np.array([0, 0, 1, 1, 0, 0, 1,])
-    # y =  np.array([0, 0, 1, 1, 0, 0, 0,])
+    x1 = np.array([0, 0, 0, 1, 0, 1, 0,])
+    x2 = np.array([0, 1, 0, 0, 1, 1, 1,])
+    x3 = np.array([1, 0, 1, 0, 1, 0, 0,])
+    x4 = np.array([0, 0, 1, 1, 0, 0, 1,])
+    y =  np.array([0, 0, 1, 1, 0, 0, 0,])
 
-    # print('H(y): ', dtree.calc_entropy(dtree.calc_discrete_probability(y)))
-    # print('x1 gain:', dtree.calc_gain(x1, y))
-    # print('x2 gain:', dtree.calc_gain(x2, y))
-    # print('x3 gain:', dtree.calc_gain(x3, y))
-    # print('x4 gain:', dtree.calc_gain(x4, y))
+    print('H(y): ', dtree.calc_entropy(dtree.calc_discrete_probability(y)))
+    print('x1 gain:', dtree.calc_gain(x1, y))
+    print('x2 gain:', dtree.calc_gain(x2, y))
+    print('x3 gain:', dtree.calc_gain(x3, y))
+    print('x4 gain:', dtree.calc_gain(x4, y))
 
     # H(y):  0.863120568566631
     # x1 gain: 0.061743357932800724
@@ -32,15 +32,15 @@ def main():
     # if x2 = 1, then y = 0 (all x2 when 1 correspond to y when 0)
     # this results in the following data set, where x2 = 0
 
-    # x1 = np.array([0, 0, 1,])
-    # x3 = np.array([1, 1, 0,])
-    # x4 = np.array([0, 1, 1,])
-    # y =  np.array([0, 1, 1,])
+    x1 = np.array([0, 0, 1,])
+    x3 = np.array([1, 1, 0,])
+    x4 = np.array([0, 1, 1,])
+    y =  np.array([0, 1, 1,])
 
-    # print('H(y): ', dtree.calc_entropy(dtree.calc_discrete_probability(y)))
-    # print('x1 gain:', dtree.calc_gain(x1, y))
-    # print('x3 gain:', dtree.calc_gain(x3, y))
-    # print('x4 gain:', dtree.calc_gain(x4, y))
+    print('H(y): ', dtree.calc_entropy(dtree.calc_discrete_probability(y)))
+    print('x1 gain:', dtree.calc_gain(x1, y))
+    print('x3 gain:', dtree.calc_gain(x3, y))
+    print('x4 gain:', dtree.calc_gain(x4, y))
 
     # H(y):  0.9182958340544896
     # x1 gain: 0.2516291673878229

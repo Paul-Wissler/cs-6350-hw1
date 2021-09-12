@@ -2,6 +2,8 @@
 import DecisionTree as dtree
 import numpy as np
 
+pd.options.mode.chained_assignment = None  # default='warn'
+
 
 def main():
     

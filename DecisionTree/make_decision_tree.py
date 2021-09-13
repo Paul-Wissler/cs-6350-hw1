@@ -37,14 +37,19 @@ class DecisionTreeModel:
 
     @property
     def max_tree_depth(self):
+        max_len = len(self.X.columns)
         if not self.input_max_tree_depth:
-            return len(self.X.columns)
+            return max_len
+        elif self.input_max_tree_depth > max_len:
+            print(f'WARNING: input tree depth of {self.input_max_tree_depth} exceeds maximum possible length, {max_len}.')
+            return max_len
         return self.input_max_tree_depth
 
-    @property
-    def default_value(self):
+    def default_value(self, y):
         if self.default_value_selection == 'majority':
             return self.y.groupby(self.y).count().idxmax()
+        elif self.default_value_selection == 'subset_majority':
+            return y.groupby(y).count().idxmax()
 
     def make_decision_tree(self, X: pd.DataFrame, y: pd.Series, 
             error_f, max_tree_depth=None) -> dict:
@@ -57,7 +62,7 @@ class DecisionTreeModel:
             if len(y_v.unique()) == 1:
                 d[split_node][v] = y_v.unique()[0]
             elif max_tree_depth == 1:
-                d[split_node][v] = self.default_value
+                d[split_node][v] = self.default_value(y)
             else:
                 d[split_node][v] = self.make_decision_tree(X_v, y_v, 
                     error_f, max_tree_depth - 1)

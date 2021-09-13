@@ -10,7 +10,7 @@ def calc_entropy(set_array: np.array, unique_outcomes=2) -> float:
         elif p == 0:
             h.append(0)
         else:
-            h.append(-p * logn(p, unique_outcomes))
+            h.append(-p * logn(p, 2))
     return sum(h)
 
 
@@ -19,15 +19,15 @@ def calc_gini_index(set_array: np.array, unique_outcomes=2) -> float:
     for p in set_array:
         if p > 1:
             raise ValueError(f'Probability was {p}. Probabilities may not exceed 1.')
-        elif p == 0:
-            h.append(0)
         else:
             h.append(-p**2)
     return 1 + sum(h)
 
 
 def calc_majority_error(set_array: np.array, unique_outcomes=2) -> float:
-    return min(set_array)
+    if len(set_array) == 1:
+        return 0
+    return sum(np.sort(set_array)[:-1])
 
 
 def calc_gain(x: np.array, y: np.array, f=calc_entropy) -> float:

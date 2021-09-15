@@ -30,11 +30,18 @@ def calc_majority_error(set_array: np.array, unique_outcomes=2) -> float:
     return sum(np.sort(set_array)[:-1])
 
 
-def calc_gain(x: np.array, y: np.array, f=calc_entropy) -> float:
+def calc_gain(x: pd.Series, y: pd.Series, f=calc_entropy) -> float:
+    is_y_nan = y.isna()
+    x = x[~is_y_nan]
+    y = y[~is_y_nan]
+
     H_y = f(calc_discrete_probability(y), unique_outcomes=len(np.unique(y)))
     s = len(y)
     e = list()
-    for v in np.unique(x):
+
+    x_no_nans = x[~x.isna()]
+    for v in np.unique(x_no_nans):
+        # TODO: Get fractional counts to work PJW
         is_x_eq_v = np.where(x==v)
         s_v = len(x[is_x_eq_v])
         y_v = y[is_x_eq_v]

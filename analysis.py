@@ -225,4 +225,25 @@ def main():
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's', 'w',]) # wind
     p = np.array(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-', '+',]) # play?
 
+    # part a - use most common val in training data as missing val
+    o = pd.Series(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r', np.nan,]) # outlook
+    missing_val = o.mode()[0]
+    o = o.fillna(missing_val)
+
+    print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_entropy))
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_entropy))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_entropy))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_entropy))
+
+    # part b - use most common val with subset of data with same outcome (i.e. Play = '+')
+    o = pd.Series(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r', np.nan,]) # outlook
+    p = pd.Series(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-', '+',]) # play?
+    missing_val = o[p=='+'].mode()[0]
+    o = o.fillna(missing_val)
+
+    print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_entropy))
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_entropy))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_entropy))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_entropy))
+
 main()

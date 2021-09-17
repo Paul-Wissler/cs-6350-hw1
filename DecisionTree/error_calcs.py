@@ -1,8 +1,9 @@
 import math
 import numpy as np
+import pandas as pd
 
 
-def calc_entropy(set_array: np.array, unique_outcomes=2) -> float:
+def calc_entropy(set_array: pd.Series, unique_outcomes=2) -> float:
     h = list()
     for p in set_array:
         if p > 1:
@@ -14,7 +15,7 @@ def calc_entropy(set_array: np.array, unique_outcomes=2) -> float:
     return sum(h)
 
 
-def calc_gini_index(set_array: np.array, unique_outcomes=2) -> float:
+def calc_gini_index(set_array: pd.Series, unique_outcomes=2) -> float:
     h = list()
     for p in set_array:
         if p > 1:
@@ -24,13 +25,19 @@ def calc_gini_index(set_array: np.array, unique_outcomes=2) -> float:
     return 1 + sum(h)
 
 
-def calc_majority_error(set_array: np.array, unique_outcomes=2) -> float:
+def calc_majority_error(set_array: pd.Series, unique_outcomes=2) -> float:
     if len(set_array) == 1:
         return 0
-    return sum(np.sort(set_array)[:-1])
+    return 1 - set_array.max()
 
 
 def calc_gain(x: pd.Series, y: pd.Series, f=calc_entropy) -> float:
+    if isinstance(x, np.ndarray):
+        x = pd.Series(x)
+
+    if isinstance(y, np.ndarray):
+        y = pd.Series(y)
+
     is_y_nan = y.isna()
     x = x[~is_y_nan]
     y = y[~is_y_nan]
@@ -40,22 +47,29 @@ def calc_gain(x: pd.Series, y: pd.Series, f=calc_entropy) -> float:
     e = list()
 
     x_no_nans = x[~x.isna()]
+    count_x_no_nans = len(x_no_nans)
     for v in np.unique(x_no_nans):
-        # TODO: Get fractional counts to work PJW
         is_x_eq_v = np.where(x==v)
-        s_v = len(x[is_x_eq_v])
-        y_v = y[is_x_eq_v]
-        prob_y_v = calc_discrete_probability(y_v)
+        frac_of_x = len(x.loc[is_x_eq_v]) / count_x_no_nans
+        null_x_v = len(x[x.isna()]) * frac_of_x
+
+        null_y_v = y.loc[x.isna()]
+
+        s_v = len(x.loc[is_x_eq_v]) + null_x_v
+        y_v = y.loc[is_x_eq_v]
+        prob_y_v = calc_discrete_probability(y_v, null_x_v=null_y_v, null_frac=frac_of_x)
         e.append(s_v / s * f(prob_y_v, unique_outcomes=len(np.unique(y))))
     return H_y - sum(e)
 
 
-def calc_discrete_probability(x: np.array) -> float:
+def calc_discrete_probability(x: np.array, null_x_v=pd.Series([]), 
+        null_frac=0) -> float:
     unique_vals = np.unique(x)
-    p = np.array([])
+    null_size = len(null_x_v) * null_frac
+    p = pd.Series([])
     for i in unique_vals:
-        num = sum(x==i)
-        p = np.append(p, num / len(x))
+        num = sum(x==i) + null_frac * sum(null_x_v==i)
+        p[i] = num / (len(x) + null_size)
     return p
 
 

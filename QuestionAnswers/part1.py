@@ -290,10 +290,10 @@ def q3c():
     t = np.array(['h', 'h', 'h', 'm', 'c', 'c', 'c', 'm', 'c', 'm', 'm', 'm', 'h', 'm', 'm',]) # temperature
     h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h', 'n',]) # humidity
     w = np.array(['w', 's', 'w', 'w', 'w', 's', 's', 'w', 'w', 'w', 's', 's', 'w', 's', 'w',]) # wind
-    
     o = pd.Series(['s', 's', 'o', 'r', 'r', 'r', 'o', 's', 's', 'r', 's', 'o', 'o', 'r', np.nan,]) # outlook
     p = pd.Series(['-', '-', '+', '+', '+', '-', '+', '-', '+', '+', '+', '+', '+', '-', '+',]) # play?
     
+    print('\nDetermine first split')
     print('outlook gain:', dtree.calc_gain(o, p, f=dtree.calc_entropy))
     print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_entropy))
     print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_entropy))
@@ -321,5 +321,39 @@ def q3c():
     # Clearly, when outlook = overcast, then play
 
     # Leaf s of Outlook node
+    t = pd.Series(['h', 'h', 'm', 'c', 'm',]) # temperature
+    h = pd.Series(['h', 'h', 'h', 'n', 'n',]) # humidity
+    w = pd.Series(['w', 's', 'w', 'w', 's',]) # wind
+    o = pd.Series(['s', 's', 's', 's', 's',]) # outlook
+    p = pd.Series(['-', '-', '-', '+', '+',]) # play?
+
+    print('\nLeaf s of Outlook node')
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_entropy))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_entropy))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_entropy))
+
+    # temperature gain: 0.5709505944546686
+    # humidity gain: 0.9709505944546686
+    # windy gain: 0.01997309402197489
+
+    # Clearly split on humidity
+    # When humidity = h, then -, if humidity = n, then +
 
     # Leaf r of Outlook node
+    t = pd.Series(['m', 'c', 'c', 'm', 'm',]) # temperature
+    h = pd.Series(['h', 'n', 'n', 'n', 'h',]) # humidity
+    w = pd.Series(['w', 'w', 's', 'w', 's',]) # wind
+    o = pd.Series(['r', 'r', 'r', 'r', 'r',]) # outlook
+    p = pd.Series(['+', '+', '-', '+', '-',]) # play?
+
+    print('\nLeaf r of Outlook node')
+    print('temperature gain:', dtree.calc_gain(t, p, f=dtree.calc_entropy))
+    print('humidity gain:', dtree.calc_gain(h, p, f=dtree.calc_entropy))
+    print('windy gain:', dtree.calc_gain(w, p, f=dtree.calc_entropy))
+
+    # temperature gain: 0.01997309402197489
+    # humidity gain: 0.01997309402197489
+    # windy gain: 0.9709505944546686
+
+    # Clearly split on windy
+    # When windy = w, then +, when windy = s then -

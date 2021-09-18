@@ -8,10 +8,10 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 def main():
 
-    part1.q1a()
+    # part1.q1a()
     # part1.q2a()
     # part1.q3a()
-    # part1.q3b()
+    part1.q3b()
     # part1.q3c()
 
 main()

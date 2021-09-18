@@ -6,8 +6,9 @@ import pandas as pd
 def calc_entropy(set_array: pd.Series, unique_outcomes=2) -> float:
     h = list()
     for p in set_array:
+        msg = f'Probability was {p}. Probabilities may not exceed 1.'
         if p > 1:
-            raise ValueError(f'Probability was {p}. Probabilities may not exceed 1.')
+            raise ValueError(msg)
         elif p == 0:
             h.append(0)
         else:
@@ -18,8 +19,9 @@ def calc_entropy(set_array: pd.Series, unique_outcomes=2) -> float:
 def calc_gini_index(set_array: pd.Series, unique_outcomes=2) -> float:
     h = list()
     for p in set_array:
+        msg = f'Probability was {p}. Probabilities may not exceed 1.'
         if p > 1:
-            raise ValueError(f'Probability was {p}. Probabilities may not exceed 1.')
+            raise ValueError(msg)
         else:
             h.append(-p**2)
     return 1 + sum(h)
@@ -42,7 +44,8 @@ def calc_gain(x: pd.Series, y: pd.Series, f=calc_entropy) -> float:
     x = x[~is_y_nan]
     y = y[~is_y_nan]
 
-    H_y = f(calc_discrete_probability(y), unique_outcomes=len(np.unique(y)))
+    H_y = f(calc_discrete_probability(y), 
+        unique_outcomes=len(np.unique(y)))
     s = len(y)
     e = list()
 
@@ -57,8 +60,10 @@ def calc_gain(x: pd.Series, y: pd.Series, f=calc_entropy) -> float:
 
         s_v = len(x.loc[is_x_eq_v]) + null_x_v
         y_v = y.loc[is_x_eq_v]
-        prob_y_v = calc_discrete_probability(y_v, null_x_v=null_y_v, null_frac=frac_of_x)
-        e.append(s_v / s * f(prob_y_v, unique_outcomes=len(np.unique(y))))
+        prob_y_v = calc_discrete_probability(y_v, 
+            null_x_v=null_y_v, null_frac=frac_of_x)
+        e.append(s_v / s * f(prob_y_v, 
+            unique_outcomes=len(np.unique(y))))
     return H_y - sum(e)
 
 

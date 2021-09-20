@@ -224,11 +224,42 @@ $Gain(humidity)=0.168621667532054$
 
 $Gain(windy)=0.0597731301493174$
 
-\item~[7 points] Continue with the fractional examples, and build the whole free with information gain. List every step and the final tree structure.  
+\item~[7 points] Continue with the fractional examples, and build the whole free with information gain. List every step and the final tree structure.
+
+\emph{Answer}
+
+Based on 3c, we clearly want to split on outlook. By subsetting the table, we can see that when Outlook is overcast, then we will play. However, if the outlook is rainy or sunny, then we need to split again.
+
+For the sunny node, we find the following gains.
+
+$Gain(temperature)=0.5709505944546686$
+
+$Gain(humidity)=0.9709505944546686$
+
+$Gain(windy)=0.01997309402197489$
+
+Clearly, we want to split on humidity, and by subsetting the data we find that when humidity = h, then -, and if humidity = n, then +.
+
+For the rainy node, we find the following gains.
+
+$Gain(temperature)=0.01997309402197489$
+
+$Gain(humidity)=0.01997309402197489$
+
+$Gain(windy)=0.9709505944546686$
+
+Clearly we want to split on windy, and by subsetting the data we find that when windy = w, then +, when windy = s then -.
 
 \end{enumerate}
 \item ~[\textbf{Bonus question 1}]~[5 points].  Prove that the information gain is always non-negative.  That means, as long as we split the data, the purity will never get worse! (Hint: use convexity)
+
+To do this, simply find the Hessian. If we can show it is positive semi-definite, then obviously the information gain is always non-negative.
+
 \item ~[\textbf{Bonus question 2}]~[5 points].  We have discussed how to use decision tree for regression (i.e., predict numerical values) --- on the leaf node, we simply use the average of the (numerical) labels as the prediction.  Now, to construct a regression tree, can you invent a gain to select the best attribute to split data in ID3 framework?
+
+\emph{Answer}
+
+My initial instinct would be to use Variance or Euclidean Distance.
 
 \end{enumerate}
 
@@ -242,7 +273,6 @@ To this end, you will first need to create a code repository in \href{https://gi
 Can find repository here: \url{https://github.com/Paul-Wissler/cs-6350-hw1}
 
 \item~[30 points] We will implement a decision tree learning algorithm for car evaluation task. The dataset is from UCI repository(\url{https://archive.ics.uci.edu/ml/datasets/car+evaluation}). Please download the processed dataset (car.zip) from Canvas.  In this task, we have $6$ car attributes, and the label is the evaluation of the car. The attribute and label values are listed in the file ``data-desc.txt". All the attributes are categorical.  The training data are stored in the file ``train.csv'', consisting of $1,000$ examples. The test data are stored in ``test.csv'', and comprise $728$ examples. In both training and test datasets, attribute values are separated by commas; the file ``data-desc.txt''  lists the attribute names in each column. 
-\\
 
 \noindent Note: we highly recommend you to use Python for implementation, because it is very convenient to load the data and handle strings. For example, the following snippet reads the CSV file line by line and split the values of the attributes and the label into a list, ``terms''. You can also use ``dictionary'' to store the categorical attribute values. In the web are numerous tutorials and examples for Python. if you have issues, just google it!
 \begin{lstlisting}
@@ -252,10 +282,33 @@ with open(CSVfile, 'r') as f:
             process one training example
 \end{lstlisting}
 \begin{enumerate}
-\item~[15 points] Implement the ID3 algorithm that supports, information gain,  majority error and gini index to select attributes for data splits. Besides, your ID3 should allow users to set the maximum tree depth. Note: you do not need to convert categorical attributes into binary ones and your tree can be wide here. 
+\item~[15 points] Implement the ID3 algorithm that supports, information gain,  majority error and gini index to select attributes for data splits. Besides, your ID3 should allow users to set the maximum tree depth. Note: you do not need to convert categorical attributes into binary ones and your tree can be wide here.
+
+\emph{Answer}
+
+Code for the ID3 algorithm can be found in the DecisionTree folder of the provided repository. Functions for calculating information gain, gini index, and majority error can be found in error\_calc.py, and code for the ID3 algorithm itself can be found in make\_decision\_tree.py. I chose to use native Python dictionaries to store the decision tree structure, reasoning that this would likely have the fastest look-up speed and most efficient storage, not to mention that it would be trivial to export it to a JSON file for long-term storage. The decision tree is constructed by a Python class called DecisionTreeModel, which constructs the model with the make\_decision\_tree method.
+
 \item~[10 points] Use your implemented algorithm to learn decision trees from the training data. Vary the maximum  tree depth from $1$ to $6$  --- for each setting, run your algorithm to learn a decision tree, and use the tree to  predict both the training  and test examples. Note that if your tree cannot grow up to 6 levels, you can stop at the maximum level. Report in a table the average prediction errors on each dataset when you use information gain, majority error and gini index heuristics, respectively.
 
-\item~[5 points] What can you conclude by comparing the training errors and the test errors? 
+\emph{Answer}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c|ccc}
+		Data & En & GI & ME \\ 
+		\hline\hline
+		Training &  0.1915 & 0.1928 & 0.1957 \\ \hline
+		Test &  0.2214 & 0.2218 & 0.2353 \\ \hline
+	\end{tabular}
+	\caption{Q2b. Average errors returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches.}
+\end{table}
+
+\item~[5 points] What can you conclude by comparing the training errors and the test errors?
+
+\emph{Answer}
+
+In all cases, the model is able to predict the training data better than the test data. This makes sense because conceptually we expect the model will fit the noise we see in the training data. In fact, if you check Table X in the Appendix, we see that at the maximum depth, the model fits the training data perfectly (100\%, no errors).
+
 \end{enumerate}
 
 
@@ -263,14 +316,46 @@ with open(CSVfile, 'r') as f:
 \begin{enumerate}
 	\item~[10 points] Let us consider ``unknown'' as a particular attribute value, and hence we do not have any missing attributes for both training and test. Vary the maximum  tree depth from $1$ to $16$ --- for each setting, run your algorithm to learn a decision tree, and use the tree to  predict both the training  and test examples. Again, if your tree cannot grow up to $16$ levels, stop at the maximum level. Report in a table the average prediction errors on each dataset when you use information gain, majority error and gini index heuristics, respectively.
 	
+	\emph{Answer}
+	
+	\begin{table}[h]
+    	\centering
+    	\begin{tabular}{c|ccc}
+    		Data & En & GI & ME \\ 
+    		\hline\hline
+    		Training &  0.0459 & 0.0440 & 0.0492 \\ \hline
+    		Test &  0.1617 & 0.1695 & 0.1737 \\ \hline
+    	\end{tabular}
+    	\caption{Q3a. Average errors returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches when ``unknown'' is considered to be an attribute value.}
+    \end{table}
+	
 	\item~[10 points] Let us consider "unknown" as  attribute value missing. Here we simply complete it with the majority of other values of the same attribute in the training set.   Vary the maximum  tree depth from $1$ to $16$ --- for each setting, run your algorithm to learn a decision tree, and use the tree to  predict both the training  and test examples. Report in a table the average prediction errors on each dataset when you use information gain, majority error and gini index heuristics, respectively.
 	
+	\emph{Answer}
+	
+	\begin{table}[h]
+    	\centering
+    	\begin{tabular}{c|ccc}
+    		Data & En & GI & ME \\ 
+    		\hline\hline
+    		Training &  0.0531 & 0.0521 & 0.0566 \\ \hline
+    		Test &  0.1560 & 0.1607 & 0.1659 \\ \hline
+    	\end{tabular}
+    	\caption{Q3b. Average errors returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches when ``unknown'' is replaced with the mode of the attribute.}
+    \end{table}
 	
 	\item~[5 points] What can you conclude by comparing the training errors and the test errors, with different tree depths, as well as different ways to deal with "unknown" attribute values?
+	
+	\emph{Answer}
+	
+	Keeping the ``unknown'' as attribute values meant that the model performed better on the training data, but worse on the test data. This is because the ``unknown'' values were noise which the model was fitting. This clearly demonstrates that handling the ``unknown'' values will result in better model performance. As seen in the Appendix, Tables X, X, Y, Y show that there is not a strictly linear increase in model performance with increasing tree depth, rather the model's performance on test data would peak at some depth (usually 3 or 4) and then dip in performance. This is likely because after some point, the specificity of the model began to fit the noise of the training data. In other words, we can see that to make the model generally powerful, we need to cap off its depth and not simply allow it to go as deep as possible.
+	
 \end{enumerate}
 \end{enumerate}
 
 \section{Appendix}
+
+\subsection{Code}
 
 \begin{lstlisting}[language=Python, caption=DecisionTree.error\_calcs]
 import math
@@ -357,6 +442,156 @@ def logn(x, n) -> float:
     return math.log(x) / math.log(n)
 
 \end{lstlisting}
+
+\subsection{Misc. Tables}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c|ccc}
+		Depth & En & GI & ME \\ 
+		\hline\hline
+		1 &  0.698 & 0.698 & 0.698 \\ \hline
+		2 &  0.698 & 0.698 & 0.698 \\ \hline
+		3 &  0.698 & 0.698 & 0.698 \\ \hline
+		4 &  0.811 & 0.803 & 0.790 \\ \hline
+        5 &  0.946 & 0.946 & 0.942 \\ \hline
+        6 &  1.000 & 1.000 & 1.000 \\ \hline
+        \hline
+        Avg & 0.8085 & 0.80716667 & 0.8043332
+
+	\end{tabular}
+	\caption{Q2b. Data returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches. Predicted on Training data.}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c|ccc}
+		Depth & En & GI & ME \\ 
+		\hline\hline
+		1 &  0.703297 & 0.703297 & 0.703297 \\ \hline
+		2 &  0.703297 & 0.703297 & 0.703297 \\ \hline
+		3 &  0.703297 & 0.703297 & 0.703297 \\ \hline
+		4 &  0.809066 & 0.806319 & 0.791209 \\ \hline
+        5 &  0.877747 & 0.877747 & 0.846154 \\ \hline
+        6 &  0.875000 & 0.875000 & 0.840659 \\ \hline
+        \hline
+        Avg & 0.778617216 & 0.7781593 & 0.764652
+
+	\end{tabular}
+	\caption{Q2b. Data returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches. Predicted on Test data.}
+\end{table}
+
+\begin{table}[h]
+    	\centering
+    	\begin{tabular}{c|ccc}
+    		Depth & En & GI & ME \\ 
+    		\hline\hline
+    		1 &  0.8808 & 0.8808 & 0.8808 \\ \hline
+    		2 &  0.8808 & 0.8912 & 0.8912 \\ \hline
+    		3 &  0.8950 & 0.9006 & 0.8988 \\ \hline
+    		4 &  0.9138 & 0.9202 & 0.9134 \\ \hline
+            5 &  0.9370 & 0.9386 & 0.9304 \\ \hline
+            6 &  0.9500 & 0.9516 & 0.9422 \\ \hline
+            7 &  0.9640 & 0.9650 & 0.9508 \\ \hline
+            8 &  0.9698 & 0.9714 & 0.9608 \\ \hline
+            9 &  0.9760 & 0.9784 & 0.9672 \\ \hline
+            10 & 0.9814 & 0.9820 & 0.9726 \\ \hline
+            11 & 0.9852 & 0.9848 & 0.9784 \\ \hline
+            12 & 0.9862 & 0.9862 & 0.9826 \\ \hline
+            13 & 0.9864 & 0.9864 & 0.9840 \\ \hline
+            14 & 0.9864 & 0.9864 & 0.9862 \\ \hline
+            15 & 0.9864 & 0.9864 & 0.9864 \\ \hline
+            16 & 0.9864 & 0.9864 & 0.9864 \\ \hline
+            \hline
+            Avg & 0.9541 & 0.956025 & 0.9507625
+
+    	\end{tabular}
+    	\caption{Q3a. Data returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches. Predicted on Training data.}
+    \end{table}
+    
+    \begin{table}[h]
+    	\centering
+    	\begin{tabular}{c|ccc}
+    		Depth & En & GI & ME \\ 
+    		\hline\hline
+    		1 &  0.8752 & 0.8752 & 0.8752 \\ \hline
+    		2 &  0.8752 & 0.8834 & 0.8834 \\ \hline
+    		3 &  0.8866 & 0.8856 & 0.8870 \\ \hline
+    		4 &  0.8742 & 0.8712 & 0.8758 \\ \hline
+            5 &  0.8628 & 0.8552 & 0.8586 \\ \hline
+            6 &  0.8514 & 0.8424 & 0.8482 \\ \hline
+            7 &  0.8366 & 0.8270 & 0.8342 \\ \hline
+            8 &  0.8312 & 0.8196 & 0.8190 \\ \hline
+            9 &  0.8266 & 0.8136 & 0.8100 \\ \hline
+            10 & 0.8224 & 0.8100 & 0.8038 \\ \hline
+            11 & 0.8154 & 0.8062 & 0.7960 \\ \hline
+            12 & 0.8130 & 0.8018 & 0.7910 \\ \hline
+            13 & 0.8132 & 0.8018 & 0.7872 \\ \hline
+            14 & 0.8098 & 0.7982 & 0.7838 \\ \hline
+            15 & 0.8098 & 0.7982 & 0.7842 \\ \hline
+            16 & 0.8098 & 0.7982 & 0.7842 \\ \hline
+            \hline
+            Avg & 0.838325 & 0.830475 & 0.82634999
+
+    	\end{tabular}
+    	\caption{Q3a. Data returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches. Predicted on Test data.}
+    \end{table}
+
+\begin{table}[h]
+    	\centering
+    	\begin{tabular}{c|ccc}
+    		Depth & En & GI & ME \\ 
+    		\hline\hline
+    		1 &  0.8808 & 0.8808 & 0.8808 \\ \hline
+    		2 &  0.8808 & 0.8912 & 0.8912 \\ \hline
+    		3 &  0.8948 & 0.8964 & 0.8978 \\ \hline
+    		4 &  0.9104 & 0.9090 & 0.9104 \\ \hline
+            5 &  0.9262 & 0.9238 & 0.9218 \\ \hline
+            6 &  0.9396 & 0.9388 & 0.9304 \\ \hline
+            7 &  0.9528 & 0.9532 & 0.9412 \\ \hline
+            8 &  0.9602 & 0.9614 & 0.9496 \\ \hline
+            9 &  0.9674 & 0.9692 & 0.9572 \\ \hline
+            10 & 0.9726 & 0.9748 & 0.9640 \\ \hline
+            11 & 0.9760 & 0.9772 & 0.9680 \\ \hline
+            12 & 0.9776 & 0.9780 & 0.9726 \\ \hline
+            13 & 0.9780 & 0.9780 & 0.9750 \\ \hline
+            14 & 0.9780 & 0.9780 & 0.9780 \\ \hline
+            15 & 0.9780 & 0.9780 & 0.9780 \\ \hline
+            16 & 0.9780 & 0.9780 & 0.9780 \\ \hline
+            \hline
+            Avg & 0.94695 & 0.9478625 & 0.943375
+
+    	\end{tabular}
+    	\caption{Q3b. Data returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches. Predicted on Training data.}
+    \end{table}
+    
+    \begin{table}[h]
+    	\centering
+    	\begin{tabular}{c|ccc}
+    		Depth & En & GI & ME \\ 
+    		\hline\hline
+    		1 &  0.8752 & 0.8752 & 0.8752 \\ \hline
+    		2 &  0.8752 & 0.8834 & 0.8834 \\ \hline
+    		3 &  0.8860 & 0.8868 & 0.8860 \\ \hline
+    		4 &  0.8760 & 0.8766 & 0.8776 \\ \hline
+            5 &  0.8674 & 0.8646 & 0.8716 \\ \hline
+            6 &  0.8578 & 0.8566 & 0.8614 \\ \hline
+            7 &  0.8460 & 0.8402 & 0.8432 \\ \hline
+            8 &  0.8410 & 0.8340 & 0.8294 \\ \hline
+            9 &  0.8352 & 0.8270 & 0.8194 \\ \hline
+            10 & 0.8292 & 0.8214 & 0.8140 \\ \hline
+            11 & 0.8246 & 0.8170 & 0.8080 \\ \hline
+            12 & 0.8214 & 0.8130 & 0.8044 \\ \hline
+            13 & 0.8214 & 0.8132 & 0.7984 \\ \hline
+            14 & 0.8160 & 0.8066 & 0.7910 \\ \hline
+            15 & 0.8160 & 0.8066 & 0.7910 \\ \hline
+            16 & 0.8160 & 0.8066 & 0.7910 \\ \hline
+            \hline
+            Avg & 0.844025 & 0.839299 & 0.8340624999
+
+    	\end{tabular}
+    	\caption{Q3b. Data returned from decision tree for Information Gain (En), Gini Index (GI), and Majority Error (ME) approaches. Predicted on Test data.}
+    \end{table}
 
 \end{document}
 %%% Local Variables:

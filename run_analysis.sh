@@ -1,1 +1,1 @@
-venv/Scripts/activate & python analysis.py & deactivate
+python3 analysis.py

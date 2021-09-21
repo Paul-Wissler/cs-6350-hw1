@@ -1,1 +1,1 @@
-venv/Scripts/activate & python main.py & deactivate
+python3 main.py

@@ -95,6 +95,13 @@
 
 \begin{enumerate}
 
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=8cm]{q1a.png}
+    \caption{Decision tree for question 1a.}
+    \label{fig:Q3-Decision-Tree}
+\end{figure}
+
 \item~[5 points] Use the ID3 algorithm with information gain to learn a decision tree from the training dataset in Table 1. Please list every step in your tree construction, including the data subsets, the attributes, and how you calculate the information gain of each attribute and how you split the dataset according to the selected attribute. Please also give a full structure of the tree. You can manually  draw the tree structure,  convert the picture into a PDF/EPS/PNG/JPG format and include it in your homework submission; or instead, you can  represent the tree with a conjunction of prediction rules as we discussed in the lecture. 
 
 \emph{Answer}
@@ -111,7 +118,7 @@ $Gain(x_3)=0.0059777114237739015$
 
 $Gain(x_4)=0.46956521111470695$
 
-$x_2=x_4$, for maximum gain, so we choose $x_2$ as it comes first. Examining the table, we see that if $x_2=1$, then $y=0$. However, when $x_2=0$, there is a split in the data. This split is laid out in the following table, where $x_2=0$
+$x_2=x_4$, for maximum gain, so we choose $x_2$ as it comes first. Examining the table, we see that if $x_2=1$, then $y=0$. However, when $x_2=0$, there is a split in the data. This split is laid out in Table 2, where $x_2=0$
 
 \begin{table}[h]
 	\centering
@@ -134,7 +141,7 @@ $Gain(x_3)=0.2516291673878229$
 
 $Gain(x_4)=0.9182958340544896$
 
-Clearly want to split on $x_4$. When $x_4=0$ then $y=0$, and when $x_4=1$ then $y=1$.
+Clearly want to split on $x_4$. When $x_4=0$ then $y=0$, and when $x_4=1$ then $y=1$. Decision tree is depicted in Figure 1.
 
 \item~[2 points] Write the boolean function which your decision tree represents. Please use a table to describe the function --- the columns are the input variables and label, \ie $x_1$, $x_2$, $x_3$, $x_4$ and $y$; the rows are different input and  function values. 
 
@@ -153,11 +160,18 @@ Clearly want to split on $x_4$. When $x_4=0$ then $y=0$, and when $x_4=1$ then $
 	%\caption{Training data for the alien invasion problem.}\label{tb-alien-train}
 \end{table}
 
-Function summary is that if $x_2=1$ then $y=0$. However, if $x_2=0$, then check $x_4$. If $x_4=0$ then $y=0$, but if $x_4=1$ then $y=1$.
+Function summary is that if $x_2=1$ then $y=0$. However, if $x_2=0$, then check $x_4$. If $x_4=0$ then $y=0$, but if $x_4=1$ then $y=1$. Function is also summarized in Table 3.
 
 \end{enumerate}
 
 \item~[17 points] Let us use a training dataset to learn a decision tree about whether to play tennis (\textbf{Page 43, Lecture: Decision Tree Learning}, accessible by clicking the link \href{http://www.cs.utah.edu/~zhe/teach/pdf/decision-trees-learning.pdf}{http://www.cs.utah.edu/\textasciitilde zhe/teach/pdf/decision-trees-learning.pdf}). In the class, we have shown how to use information gain to construct the tree in ID3 framework.  
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=12cm]{q2ab-q3d.png}
+    \caption{Decision tree for questions 2a, 2b, and 3d. Despite all three questions using different methods, they end up with the same tree.}
+    \label{fig:Q3-Decision-Tree}
+\end{figure}
 
 \begin{enumerate}
 	\item~[7 points] Now, please use majority error (ME) to calculate the gain, and select the best feature to split the data in ID3 framework. As in problem 1, please list every step in your tree construction,  the attributes,  how you calculate the gain of each attribute and how you split the dataset according to the selected attribute. Please also give a full structure of the tree.
@@ -166,11 +180,115 @@ Function summary is that if $x_2=1$ then $y=0$. However, if $x_2=0$, then check 
 	
 	The approach is similar as in 1a, except we will pass the calc\_majority\_error function into the calc\_gain function. The calc\_majority\_error function requires a little explanation, as opposed to the calc\_entropy or calc\_gini\_index functions, whose code explain themselves sufficiently. Majority error, as a concept, means that all we care about is what is the maximum probability of all available features. If we know that, then because all probabilities MUST sum to 1, we can simply take the difference to calculate the majority error. If there is only one available probability, we will assume it is 1, and simply return 0 as the majority error. This 'if' statement is probably not strictly required in the code, since if a set of probabilities has only one result, then one would expect it to be a probability of 1, but we will keep it here for now.
 	
+	play? ME:  0.35714285714285715
+	
+    outlook gain: 0.0714285714285714
+    
+    temperature gain: 5.551115123125783e-17
+    
+    humidity gain: 0.07142857142857145
+    
+    windy gain: 5.551115123125783e-17
+    
+    Can split on either outlook or humidity, will split on outlook for consistency
+    
+    Overcast: [1 1 1 1]
+    
+    Rainy: [1 1 0 1 0]
+    
+    Sunny: [0 0 0 1 1]
+    
+    Clearly, when outlook = overcast, then play = +
+    
+    \hline
+    \emph{Leaf when outlook = rainy}
+    
+    play? when o = r ME:  0.4
+    
+    temperature gain: 0.0
+    
+    humidity gain: 0.0
+    
+    windy gain: 0.4
+    
+    Clearly, split on windy
+
+    Can see from data, when windy = w, then play? = +, and when windy = s, then play = -
+    
+    \hline
+    \emph{Leaf when outlook = sunny}
+    
+    play? when o = s ME:  0.4
+    
+    temperature gain: 0.2
+    
+    humidity gain: 0.4
+    
+    windy gain: 0.0
+    
+    Clearly, split on humidity
+
+    Can see from data, when humidity = h, then play? = -, and when humidity = n, then play? = +
+    
+    The decision tree is summarized in Figure 2.
+	
 	\item~[7 points] Please use gini index (GI) to calculate the gain, and conduct tree learning with ID3 framework. List every step and the tree structure.
 	
 	\emph{Answer}
 	
 	The approach is similar as in 1a and 2a, except we will pass the calc\_gini\_index function into the calc\_gain function.
+	
+	play? GI:  0.4591836734693877
+	
+    outlook gain: 0.11632653061224485
+    
+    temperature gain: 0.018707482993197244
+    
+    humidity gain: 0.09183673469387743
+    
+    windy gain: 0.030612244897959162
+    
+    outlook has highest gain, so split there
+
+    Overcast: [1 1 1 1]
+
+    Rainy: [1 1 0 1 0]
+
+    Sunny: [0 0 0 1 1]
+
+    Clearly, when outlook = overcast, then play = +
+    
+    \hline
+    Leaf when outlook = rainy
+    
+    play? when o = r GI:  0.4
+    
+    temperature gain: 0.013333333333333308
+    
+    humidity gain: 0.013333333333333308
+    
+    windy gain: 0.48
+    
+    Clearly, split on windy
+    
+    Can see from data, when windy = w, then play? = +, and when windy = s, then play = -
+    
+    \hline
+    Leaf when outlook = sunny
+    
+    play? when o = s ME:  0.4
+    
+    temperature gain: 0.27999999999999997
+    
+    humidity gain: 0.48
+    
+    windy gain: 0.013333333333333308
+    
+    Clearly, split on humidity
+    
+    Can see from data, when humidity = h, then play? = -, and when humidity = n, then play? = +
+    
+    Final decision tree is summarized in Figure 2.
 	
 	\item~[3 points] Compare the two trees you just created with the one we built in the class (see Page 62 of the lecture slides). Are there any differences? Why?
 	
@@ -181,12 +299,13 @@ Function summary is that if $x_2=1$ then $y=0$. However, if $x_2=0$, then check 
 \end{enumerate}
 
 \item~[16 points] Continue with the same training data in Problem 2. Suppose before the tree construction, we receive one more training instance where Outlook's value is missing: \{Outlook: Missing, Temperature: Mild, Humidity: Normal, Wind: Weak, Play: Yes\}. 
+
 \begin{enumerate}
 \item~[3 points] Use the most common value in the training data as the missing  value, and calculate the information gains of the four features. Note that if there is a tie for the most common value, you can choose any value in the tie.  Indicate the best feature. 
 
 \emph{Answer}
 
-Determining the most common value can be done simply by putting the data into a Pandas Series and using the mode function then selecting the first index. Doing so, we find the following results.
+Determining the most common value can be done simply by putting the data into a Pandas Series and using the mode function then selecting the first index. Then, simply calculate the information gain in Python as we have done before. Doing so, we find the following results.
 
 $Gain(outlook)=0.2273273022811375$
 
@@ -214,7 +333,7 @@ $Gain(windy)=0.0597731301493174$
 
 \emph{Answer}
 
-By default, I have coded the calc\_gain and calc\_discrete\_probability functions to use fractional counts in the cases where nulls are not handled before passing in the $x$ an $y$ arrays.
+By default, I have coded the calc\_gain and calc\_discrete\_probability functions to use fractional counts in the cases where nulls are not handled before passing in the $x$ an $y$ arrays. Doing so yields the following results.
 
 $Gain(outlook)=0.22444415770980708$
 
@@ -249,6 +368,8 @@ $Gain(humidity)=0.01997309402197489$
 $Gain(windy)=0.9709505944546686$
 
 Clearly we want to split on windy, and by subsetting the data we find that when windy = w, then +, when windy = s then -.
+
+The Decision Tree is summarized in Figure 2.
 
 \end{enumerate}
 \item ~[\textbf{Bonus question 1}]~[5 points].  Prove that the information gain is always non-negative.  That means, as long as we split the data, the purity will never get worse! (Hint: use convexity)

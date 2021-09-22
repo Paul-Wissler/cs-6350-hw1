@@ -285,7 +285,7 @@ def q3c():
     # windy gain: 0.0597731301493174
 
 
-def q3c():
+def q3d():
     # part d - use fractional counts and build tree
     t = np.array(['h', 'h', 'h', 'm', 'c', 'c', 'c', 'm', 'c', 'm', 'm', 'm', 'h', 'm', 'm',]) # temperature
     h = np.array(['h', 'h', 'h', 'h', 'n', 'n', 'n', 'h', 'n', 'n', 'n', 'h', 'n', 'h', 'n',]) # humidity

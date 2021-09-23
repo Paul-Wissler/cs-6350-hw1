@@ -123,6 +123,14 @@ def q2a():
     # windy gain: 0.4
 
     # Clearly, split on windy
+
+    # s
+    # ['s', 's',]
+    # ['-', '-',]
+    # w
+    # ['w', 'w', 'w',]
+    # ['+', '+', '+',]
+
     # Can see from data, when windy = w, then play? = +, and when windy = s, then play = -
 
     # Leaf when outlook = s
@@ -138,6 +146,14 @@ def q2a():
     # windy gain: 0.0
 
     # Clearly, split on humidity
+
+    # h
+    # ['h', 'h', 'h']
+    # ['-', '-', '-']
+    # n
+    # ['n', 'n',]
+    # ['+', '+',]
+
     # Can see from data, when humidity = h, then play? = -, and when humidity = n, then play? = +
 
     print('play? when o = s ME: ', dtree.calc_majority_error(dtree.calc_discrete_probability(p)))

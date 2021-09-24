@@ -198,6 +198,8 @@ Function summary is that if $x_2=1$ then $y=0$. However, if $x_2=0$, then check 
     
     windy gain: 5.551115123125783e-17
     
+    \vspace{5mm}
+
     Can split on either outlook or humidity, will split on Outlook for consistency
     
     \vspace{5mm}
@@ -371,7 +373,7 @@ Function summary is that if $x_2=1$ then $y=0$. However, if $x_2=0$, then check 
 
 \emph{Answer}
 
-Determining the most common value can be done simply by putting the data into a Pandas Series and using the mode function then selecting the first index. Then, simply calculate the information gain in Python as we have done before. This is done in QuestionAnswers.part1.q3a. Doing so, we find the following results.
+Determining the most common value can be done simply by putting the data into a Pandas Series and using the mode function then selecting the first index of the output. Then, simply calculate the information gain in Python as we have done before. This is done in QuestionAnswers.part1.q3a. Doing so, we find the following results.
 
 \vspace{5mm}
 
@@ -387,7 +389,7 @@ $Gain(windy)=0.0597731301493174$
 
 \emph{Answer}
 
-The method here is largely the same as in 3a, except we subset out the values with the same $y$ value as in the "missing" index. This yields the following results. This is done in QuestionAnswers.part1.q3b.
+The method here is largely the same as in 3a, except we do those same calculation so the subset of values with the same $y$ value as in the "missing" index. This yields the following results. This is done in QuestionAnswers.part1.q3b.
 
 \vspace{5mm}
 
@@ -405,7 +407,11 @@ $Gain(windy)=0.0597731301493174$
 
 By default, I have coded the calc\_gain and calc\_discrete\_probability functions to use fractional counts in the cases where nulls are not handled before passing in the $x$ an $y$ arrays. These functions can be found in Listing 1 of the Appendix. 
 
+\vspace{5mm}
+
 Basically, I check for the number of null values in the $X$ array, and calculate for each unique $x$ value (excluding nulls) what fraction of the $X$ array that value represents. I then multiply the number of null values by the fraction to get a normalized number for the nulls filled in with the fractional result. Again, for a full understanding of how this works out, please check the calc\_gain and calc\_discrete\_probability functions  in Listing 1 of the Appendix.
+
+\vspace{5mm}
 
 This question's results are calculated in QuestionAnswers.part1.q3c, yielding the following results.
 
@@ -434,6 +440,8 @@ $Gain(temperature)=0.5709505944546686$
 $Gain(humidity)=0.9709505944546686$
 
 $Gain(windy)=0.01997309402197489$
+
+\vspace{5mm}
 
 Clearly, split on humidity.
 
@@ -479,6 +487,24 @@ The Decision Tree is summarized in Figure 2.
 \item ~[\textbf{Bonus question 1}]~[5 points].  Prove that the information gain is always non-negative.  That means, as long as we split the data, the purity will never get worse! (Hint: use convexity)
 
 To do this, simply find the Hessian. If we can show it is positive semi-definite, then obviously the information gain is always non-negative.
+
+\[
+    H(X) = - \sum_{i=1}^n x_i ln(x_i)
+\]
+
+\[
+    \frac{dH(X)}{dx_i} = -\frac{x_i}{x_i} - ln(x_i) = -(1 + ln(x_i))
+\]
+
+\[
+    \frac{d^2H(X)}{dx_i^2} =  -\frac{1}{x_i}
+\]
+
+\[
+    \frac{d^2H(X)}{dx_ix_j} =  0
+\]
+
+Therefore, $trace(H(X)) = -\sum_{i=1}^n \frac{1}{x_i}$, and all other values are 0. This is concave, so as x increases, the entropy decreases.
 
 \item ~[\textbf{Bonus question 2}]~[5 points].  We have discussed how to use decision tree for regression (i.e., predict numerical values) --- on the leaf node, we simply use the average of the (numerical) labels as the prediction.  Now, to construct a regression tree, can you invent a gain to select the best attribute to split data in ID3 framework?
 
@@ -573,7 +599,7 @@ In all cases, the model is able to predict the training data better than the tes
 	
 	\emph{Answer}
 	
-	Keeping the ``unknown'' as attribute values meant that the model performed better on the training data, but worse on the test data. This is because the ``unknown'' values were noise which the model was fitting. This clearly demonstrates that handling the ``unknown'' values will result in better model performance. As seen in the Appendix, Tables X, X, Y, Y show that there is not a strictly linear increase in model performance with increasing tree depth, rather the model's performance on test data would peak at some depth (usually 3 or 4) and then dip in performance. This is likely because after some point, the specificity of the model began to fit the noise of the training data. In other words, we can see that to make the model generally powerful, we need to cap off its depth and not simply allow it to go as deep as possible.
+	Keeping the ``unknown'' as attribute values meant that the model performed better on the training data, but worse on the test data. This is because the ``unknown'' values were noise which the model was fitting. This clearly demonstrates that handling the ``unknown'' values will result in better model performance. As seen in the Appendix, Tables 9, 10, 11, 12 show that there is not a strictly linear increase in model performance with increasing tree depth, rather the model's performance on test data would peak at some depth (usually 3 or 4) and then dip in performance. This is likely because after some point, the specificity of the model began to fit the noise of the training data. In other words, we can see that to make the model generally powerful, we need to cap off its depth and not simply allow it to go as deep as possible.
 	
 \end{enumerate}
 \end{enumerate}

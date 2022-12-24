@@ -201,6 +201,7 @@ def q3a():
         training_acc = pd.Series([])
         test_acc = pd.Series([])
         for i in range(1, len(x_cols) + 1):
+            print(i)
             bank_data = pd.read_csv(
                 Path('bank_data', 'train.csv'), 
                 names=[
@@ -474,6 +475,7 @@ def q3b():
         training_acc = pd.Series([])
         test_acc = pd.Series([])
         for i in range(1, len(x_cols) + 1):
+            print(i)
             X = bank_data[x_cols]
             y = bank_data.y
             numeric_cols = ['age', 'balance', 'day', 'duration', 'campaign', 'pdays', 'previous']
